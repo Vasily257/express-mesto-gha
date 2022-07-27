@@ -29,8 +29,8 @@ app.use(logger);
 app.use('/', routes);
 
 async function main() {
-  // eslint-disable-next-line no-console
   await mongoose.connect('mongodb://localhost:27017/mestodb');
+  // eslint-disable-next-line no-console
   console.log('Connected to db');
 
   await app.listen(PORT);

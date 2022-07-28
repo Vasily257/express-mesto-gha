@@ -6,13 +6,15 @@ const mongoose = require('mongoose');
 
 const { routes } = require('./src/routes/index');
 
-const { logger } = require('./src/utils/utils');
+const { logger, addTempUser } = require('./src/utils/utils');
 
 const { PORT } = process.env;
 
 const app = express();
 
 app.use(logger);
+
+app.use(addTempUser);
 
 app.use(routes);
 

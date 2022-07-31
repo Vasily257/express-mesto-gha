@@ -63,35 +63,67 @@ module.exports.createUser = async (req, res) => {
 
 module.exports.updateProfile = async (req, res) => {
   const { name, about } = req.body;
-  const user = await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      name,
-      about,
-    },
-    {
-      new: true,
-      runValidators: true,
-      upsert: false,
-    }
-  );
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name,
+        about,
+      },
+      {
+        new: true,
+        runValidators: true,
+        upsert: false,
+      }
+    ).orFail(() => createNotFoundError('Пользователь по указанному _id не найден.'));
 
-  res.send(user);
+    res.send(user);
+  } catch (err) {
+    switch (err.name) {
+      case 'ValidationError':
+        handleIncorrectDataError(res, 'Переданы некорректные данные при обновлении профиля.');
+        break;
+      case 'CastError':
+        handleIncorrectDataError(res, 'Неправильно указан _id пользователя.');
+        break;
+      case 'DocumentNotFoundError':
+        handleNotFoundError(res, err);
+        break;
+      default:
+        handleDefaultError(err);
+    }
+  }
 };
 
 module.exports.updateAvatar = async (req, res) => {
   const { avatar } = req.body;
-  const user = await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      avatar,
-    },
-    {
-      new: true,
-      runValidators: true,
-      upsert: false,
-    }
-  );
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        avatar,
+      },
+      {
+        new: true,
+        runValidators: true,
+        upsert: false,
+      }
+    ).orFail(() => createNotFoundError('Пользователь по указанному _id не найден.'));
 
-  res.send(user);
+    res.send(user);
+  } catch (err) {
+    switch (err.name) {
+      case 'ValidationError':
+        handleIncorrectDataError(res, 'Переданы некорректные данные при обновлении аватара.');
+        break;
+      case 'CastError':
+        handleIncorrectDataError(res, 'Неправильно указан _id пользователя.');
+        break;
+      case 'DocumentNotFoundError':
+        handleNotFoundError(res, err);
+        break;
+      default:
+        handleDefaultError(err);
+    }
+  }
 };

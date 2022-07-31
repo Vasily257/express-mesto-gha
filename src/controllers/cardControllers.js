@@ -24,14 +24,7 @@ module.exports.likeCard = async (req, res) => {
   const card = await Card.findByIdAndUpdate(
     req.params.id,
     {
-      $addToSet: {
-        likes: {
-          name: req.user.name,
-          about: req.user.about,
-          avatar: req.user.avatar,
-          _id: req.user._id,
-        },
-      },
+      $addToSet: { likes: req.user._id },
     },
     { new: true }
   );

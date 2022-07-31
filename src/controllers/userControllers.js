@@ -1,13 +1,36 @@
 const { User } = require('../models/userModels');
 
+const {
+  handleCastError,
+  createNotFoundError,
+  handleNotFoundError,
+  handleDefaultError,
+} = require('../utils/utils');
+
 module.exports.getUsers = async (req, res) => {
   const users = await User.find({});
   res.send(users);
 };
 
 module.exports.getUserById = async (req, res) => {
-  const user = await User.findById(req.params.id);
-  res.send(user);
+  try {
+    const user = await User.findById(req.params.id).orFail(() =>
+      createNotFoundError('Пользователь с таким id не найден')
+    );
+
+    res.send(user);
+  } catch (err) {
+    switch (err.name) {
+      case 'CastError':
+        handleCastError(res, 'Неправильно указан id пользователя.');
+        break;
+      case 'DocumentNotFoundError':
+        handleNotFoundError(res, err);
+        break;
+      default:
+        handleDefaultError(err);
+    }
+  }
 };
 
 module.exports.createUser = async (req, res) => {

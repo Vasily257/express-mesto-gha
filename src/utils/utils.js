@@ -1,3 +1,9 @@
+const {
+  BAD_REQUEST_STATUS,
+  NOT_FOUND_STATUS,
+  INTERNAL_SERVER_ERROR_STATUS,
+} = require('./constants');
+
 module.exports.logger = (req, res, next) => {
   // eslint-disable-next-line no-console
   console.log(`${req.method}: ${req.path}`);
@@ -16,4 +22,27 @@ module.exports.addTempUser = (req, res, next) => {
   };
 
   next();
+};
+
+// Error handlers
+
+module.exports.handleCastError = (res, errorText) => {
+  res.status(BAD_REQUEST_STATUS);
+  res.send({ message: errorText });
+};
+
+module.exports.createNotFoundError = (errorText) => {
+  const err = new Error(errorText);
+  err.name = 'DocumentNotFoundError';
+  return err;
+};
+
+module.exports.handleNotFoundError = (res, err) => {
+  res.status(NOT_FOUND_STATUS);
+  res.send({ message: err.message });
+};
+
+module.exports.handleDefaultError = (res) => {
+  res.status(INTERNAL_SERVER_ERROR_STATUS);
+  res.send({ message: 'Внутренняя ошибка сервера' });
 };

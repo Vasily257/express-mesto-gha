@@ -16,3 +16,38 @@ module.exports.createUser = async (req, res) => {
 
   res.send(user);
 };
+
+module.exports.updateProfile = async (req, res) => {
+  const { name, about } = req.body;
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      name,
+      about,
+    },
+    {
+      new: true,
+      runValidators: true,
+      upsert: false,
+    }
+  );
+
+  res.send(user);
+};
+
+module.exports.updateAvatar = async (req, res) => {
+  const { avatar } = req.body;
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      avatar,
+    },
+    {
+      new: true,
+      runValidators: true,
+      upsert: false,
+    }
+  );
+
+  res.send(user);
+};

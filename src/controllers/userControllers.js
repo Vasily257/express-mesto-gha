@@ -12,7 +12,14 @@ module.exports.getUserById = async (req, res) => {
 
 module.exports.createUser = async (req, res) => {
   const { name, about, avatar } = req.body;
-  const user = await User.create({ name, about, avatar });
+  const user = await User.create(
+    { name, about, avatar },
+    {
+      new: true,
+      runValidators: true,
+      upsert: false,
+    }
+  );
 
   res.send(user);
 };

@@ -1,12 +1,12 @@
 {
   "name": "express-mesto-gha",
   "version": "1.0.0",
-  "description": "# Проект Mesto фронтенд + бэкенд",
+  "description": "Проект Mesto фронтенд + бэкенд",
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
-    "test": "echo [![Tests for sprint 13](https://github.com/Vasily257/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/Vasily257/express-mesto-gha/actions/workflows/tests-13-sprint.yml) && exit 1",
+    "test": "echo && exit 1",
     "lint": "npx eslint ."
   },
   "repository": {

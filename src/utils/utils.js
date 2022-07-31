@@ -26,7 +26,7 @@ module.exports.addTempUser = (req, res, next) => {
 
 // Error handlers
 
-module.exports.handleCastError = (res, errorText) => {
+module.exports.handleIncorrectDataError = (res, errorText) => {
   res.status(BAD_REQUEST_STATUS);
   res.send({ message: errorText });
 };

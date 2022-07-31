@@ -1,17 +1,12 @@
 const { Card } = require('../models/cardModels');
-const {
-  handleIncorrectDataError,
-  createNotFoundError,
-  handleNotFoundError,
-  handleDefaultError,
-} = require('../utils/utils');
+const { createNotFoundError, showErrorMessage } = require('../utils/utils');
 
 module.exports.getCards = async (req, res) => {
   try {
     const cards = await Card.find({});
     res.send(cards);
   } catch (err) {
-    handleDefaultError(err);
+    showErrorMessage(err, res);
   }
 };
 
@@ -24,34 +19,17 @@ module.exports.createCard = async (req, res) => {
 
     res.send(card);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, 'Переданы некорректные данные при создании карточки.');
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };
 
 module.exports.deleteCard = async (req, res) => {
   try {
-    const card = await Card.findByIdAndDelete(req.params.id).orFail(() =>
-      createNotFoundError('Карточка по указанному _id не найдена.')
-    );
+    const card = await Card.findByIdAndDelete(req.params.id).orFail(() => createNotFoundError());
 
     res.send(card);
   } catch (err) {
-    switch (err.name) {
-      case 'CastError':
-        handleIncorrectDataError(res, 'Неправильно указан _id карточки.');
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };
 
@@ -63,20 +41,11 @@ module.exports.likeCard = async (req, res) => {
         $addToSet: { likes: req.user._id },
       },
       { new: true }
-    ).orFail(() => createNotFoundError('Карточка по указанному _id не найдена.'));
+    ).orFail(() => createNotFoundError());
 
     res.send(card);
   } catch (err) {
-    switch (err.name) {
-      case 'CastError':
-        handleIncorrectDataError(res, 'Переданы некорректные данные для постановки/снятии лайка.');
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };
 
@@ -88,19 +57,10 @@ module.exports.dislikeCard = async (req, res) => {
         $pull: { likes: req.user._id },
       },
       { new: true }
-    ).orFail(() => createNotFoundError('Карточка по указанному _id не найдена.'));
+    ).orFail(() => createNotFoundError());
 
     res.send(card);
   } catch (err) {
-    switch (err.name) {
-      case 'CastError':
-        handleIncorrectDataError(res, 'Переданы некорректные данные для постановки/снятии лайка.');
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };

@@ -26,23 +26,42 @@ module.exports.addTempUser = (req, res, next) => {
 
 // Error handlers
 
-module.exports.handleIncorrectDataError = (res, errorText) => {
-  res.status(BAD_REQUEST_STATUS);
-  res.send({ message: errorText });
-};
-
-module.exports.createNotFoundError = (errorText) => {
-  const err = new Error(errorText);
+module.exports.createNotFoundError = () => {
+  const err = new Error('По указанному _id не найден пользователь или карточка.');
   err.name = 'DocumentNotFoundError';
   return err;
 };
 
-module.exports.handleNotFoundError = (res, err) => {
+const handleIncorrectDataError = (res, errorText) => {
+  res.status(BAD_REQUEST_STATUS);
+  res.send({ message: errorText });
+};
+
+const handleNotFoundError = (res, err) => {
   res.status(NOT_FOUND_STATUS);
   res.send({ message: err.message });
 };
 
-module.exports.handleDefaultError = (res) => {
+const handleDefaultError = (res) => {
   res.status(INTERNAL_SERVER_ERROR_STATUS);
   res.send({ message: 'Внутренняя ошибка сервера' });
+};
+
+module.exports.showErrorMessage = (err, res) => {
+  switch (err.name) {
+    case 'ValidationError':
+      handleIncorrectDataError(
+        res,
+        'Переданы некорректные данные при создании пользователя/карточки или при обновлении данных пользователя.'
+      );
+      break;
+    case 'CastError':
+      handleIncorrectDataError(res, 'Неправильно указан _id пользователя/карточки.');
+      break;
+    case 'DocumentNotFoundError':
+      handleNotFoundError(res, err);
+      break;
+    default:
+      handleDefaultError(err);
+  }
 };

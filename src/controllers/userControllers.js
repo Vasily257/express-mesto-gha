@@ -1,39 +1,23 @@
 const { User } = require('../models/userModels');
 
-const {
-  handleIncorrectDataError,
-  createNotFoundError,
-  handleNotFoundError,
-  handleDefaultError,
-} = require('../utils/utils');
+const { createNotFoundError, showErrorMessage } = require('../utils/utils');
 
 module.exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({});
     res.send(users);
   } catch (err) {
-    handleDefaultError(err);
+    showErrorMessage(err, res);
   }
 };
 
 module.exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).orFail(() =>
-      createNotFoundError('Пользователь по указанному _id не найден.')
-    );
+    const user = await User.findById(req.params.id).orFail(() => createNotFoundError());
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'CastError':
-        handleIncorrectDataError(res, 'Неправильно указан _id пользователя.');
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };
 
@@ -51,13 +35,7 @@ module.exports.createUser = async (req, res) => {
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, 'Переданы некорректные данные при создании пользователя');
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };
 
@@ -75,23 +53,11 @@ module.exports.updateProfile = async (req, res) => {
         runValidators: true,
         upsert: false,
       }
-    ).orFail(() => createNotFoundError('Пользователь по указанному _id не найден.'));
+    ).orFail(() => createNotFoundError());
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, 'Переданы некорректные данные при обновлении профиля.');
-        break;
-      case 'CastError':
-        handleIncorrectDataError(res, 'Неправильно указан _id пользователя.');
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };
 
@@ -108,22 +74,10 @@ module.exports.updateAvatar = async (req, res) => {
         runValidators: true,
         upsert: false,
       }
-    ).orFail(() => createNotFoundError('Пользователь по указанному _id не найден.'));
+    ).orFail(() => createNotFoundError());
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, 'Переданы некорректные данные при обновлении аватара.');
-        break;
-      case 'CastError':
-        handleIncorrectDataError(res, 'Неправильно указан _id пользователя.');
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(err);
-    }
+    showErrorMessage(err, res);
   }
 };

@@ -14,7 +14,7 @@
     "url": "git+https://github.com/Vasily257/express-mesto-gha.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vasiliy Kalmykov <vasily.sergeevich.k@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Vasily257/express-mesto-gha/issues"

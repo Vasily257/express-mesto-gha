@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 
+const process = require('process');
+
 const mongoose = require('mongoose');
 
 const { routes } = require('./src/routes/index');
@@ -23,3 +25,9 @@ async function main() {
 }
 
 main();
+
+process.on('uncaughtException', (err, origin) => {
+  console.log(
+    `${origin} ${err.name} c текстом ${err.message} не была обработана. Обратите внимание!`
+  );
+});

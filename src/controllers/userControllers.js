@@ -27,9 +27,8 @@ module.exports.getUsers = async (req, res) => {
 
 module.exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).orFail(() =>
-      createNotFoundError(MISSING_USER_ID_ERROR_TEXT)
-    );
+    const user = await User.findById(req.params.id);
+    user.orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
 
     res.send(user);
   } catch (err) {
@@ -76,8 +75,10 @@ module.exports.updateProfile = async (req, res) => {
         new: true,
         runValidators: true,
         upsert: false,
-      }
-    ).orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
+      },
+    );
+
+    user.orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
 
     res.send(user);
   } catch (err) {
@@ -109,8 +110,10 @@ module.exports.updateAvatar = async (req, res) => {
         new: true,
         runValidators: true,
         upsert: false,
-      }
-    ).orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
+      },
+    );
+
+    user.orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
 
     res.send(user);
   } catch (err) {

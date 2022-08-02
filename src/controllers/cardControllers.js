@@ -42,9 +42,8 @@ module.exports.createCard = async (req, res) => {
 
 module.exports.deleteCard = async (req, res) => {
   try {
-    const card = await Card.findByIdAndDelete(req.params.id).orFail(() =>
-      createNotFoundError(MISSING_CARD_ID_ERROR_TEXT)
-    );
+    const card = await Card.findByIdAndDelete(req.params.id);
+    card.orFail(() => createNotFoundError(MISSING_CARD_ID_ERROR_TEXT));
 
     res.send(card);
   } catch (err) {
@@ -68,8 +67,10 @@ module.exports.likeCard = async (req, res) => {
       {
         $addToSet: { likes: req.user._id },
       },
-      { new: true }
-    ).orFail(() => createNotFoundError(MISSING_CARD_ID_ERROR_TEXT));
+      { new: true },
+    );
+
+    card.orFail(() => createNotFoundError(MISSING_CARD_ID_ERROR_TEXT));
 
     res.send(card);
   } catch (err) {
@@ -93,8 +94,10 @@ module.exports.dislikeCard = async (req, res) => {
       {
         $pull: { likes: req.user._id },
       },
-      { new: true }
-    ).orFail(() => createNotFoundError(MISSING_CARD_ID_ERROR_TEXT));
+      { new: true },
+    );
+
+    card.orFail(() => createNotFoundError(MISSING_CARD_ID_ERROR_TEXT));
 
     res.send(card);
   } catch (err) {

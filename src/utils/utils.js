@@ -18,7 +18,7 @@ module.exports.logger = (req, res, next) => {
 
 module.exports.addTempUser = (req, res, next) => {
   req.user = {
-    _id: '62e25a846c384130a4d018c8',
+    _id: '62e79cd855fd2d842b7eaf5c',
   };
 
   next();

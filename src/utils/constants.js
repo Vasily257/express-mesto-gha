@@ -4,6 +4,11 @@ const NOT_FOUND_STATUS = 404;
 const INTERNAL_SERVER_ERROR_STATUS = 500;
 
 const USER_CREATION_ERROR_TEXT = 'Переданы некорректные данные при создании пользователя.';
+const USER_UPDATE_PROFILE_ERROR_TEXT =
+  'Переданы некорректные данные при обновлении профиля пользователя.';
+const USER_UPDATE_AVATAR_ERROR_TEXT =
+  'Переданы некорректные данные при обновлении аватара пользователя.';
+
 const INCORRECT_USER_ID_ERROR_TEXT = 'Неправильно указан _id пользователя.';
 const MISSING_USER_ID_ERROR_TEXT = 'По указанному _id пользователь не найден.';
 
@@ -13,7 +18,7 @@ const MISSING_CARD_ID_ERROR_TEXT = 'По указанному _id карточк
 
 const SERVER_ERROR_TEXT = 'Внутренняя ошибка сервера';
 
-const LOGGER_TEXT = 'Запрос залоггирован!';
+const LOGGER_TEXT = 'Запрос залогирован!';
 
 module.exports = {
   CREATED_STATUS,
@@ -22,6 +27,8 @@ module.exports = {
   INTERNAL_SERVER_ERROR_STATUS,
 
   USER_CREATION_ERROR_TEXT,
+  USER_UPDATE_PROFILE_ERROR_TEXT,
+  USER_UPDATE_AVATAR_ERROR_TEXT,
   INCORRECT_USER_ID_ERROR_TEXT,
   MISSING_USER_ID_ERROR_TEXT,
   CARD_CREATION_ERROR_TEXT,

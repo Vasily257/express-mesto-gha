@@ -1,41 +1,65 @@
 const { User } = require('../models/userModels');
 
-const { createNotFoundError, showErrorMessage } = require('../utils/utils');
+const {
+  handlesuccessfulСreation,
+  createNotFoundError,
+  handleIncorrectDataError,
+  handleNotFoundError,
+  handleDefaultError,
+} = require('../utils/utils');
+
+const {
+  USER_CREATION_ERROR_TEXT,
+  USER_UPDATE_PROFILE_ERROR_TEXT,
+  USER_UPDATE_AVATAR_ERROR_TEXT,
+  INCORRECT_USER_ID_ERROR_TEXT,
+  MISSING_USER_ID_ERROR_TEXT,
+} = require('../utils/constants');
 
 module.exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({});
     res.send(users);
   } catch (err) {
-    showErrorMessage(err, res);
+    handleDefaultError(err);
   }
 };
 
 module.exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).orFail(() => createNotFoundError());
+    const user = await User.findById(req.params.id).orFail(() =>
+      createNotFoundError(MISSING_USER_ID_ERROR_TEXT)
+    );
 
     res.send(user);
   } catch (err) {
-    showErrorMessage(err, res);
+    switch (err.name) {
+      case 'CastError':
+        handleIncorrectDataError(res, INCORRECT_USER_ID_ERROR_TEXT);
+        break;
+      case 'DocumentNotFoundError':
+        handleNotFoundError(res, err);
+        break;
+      default:
+        handleDefaultError(err);
+    }
   }
 };
 
 module.exports.createUser = async (req, res) => {
   const { name, about, avatar } = req.body;
   try {
-    const user = await User.create(
-      { name, about, avatar },
-      {
-        new: true,
-        runValidators: true,
-        upsert: false,
-      }
-    );
+    const user = await User.create({ name, about, avatar });
 
-    res.send(user);
+    handlesuccessfulСreation(res, user);
   } catch (err) {
-    showErrorMessage(err, res);
+    switch (err.name) {
+      case 'ValidationError':
+        handleIncorrectDataError(res, USER_CREATION_ERROR_TEXT);
+        break;
+      default:
+        handleDefaultError(err);
+    }
   }
 };
 
@@ -53,11 +77,23 @@ module.exports.updateProfile = async (req, res) => {
         runValidators: true,
         upsert: false,
       }
-    ).orFail(() => createNotFoundError());
+    ).orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
 
     res.send(user);
   } catch (err) {
-    showErrorMessage(err, res);
+    switch (err.name) {
+      case 'ValidationError':
+        handleIncorrectDataError(res, USER_UPDATE_PROFILE_ERROR_TEXT);
+        break;
+      case 'CastError':
+        handleIncorrectDataError(res, INCORRECT_USER_ID_ERROR_TEXT);
+        break;
+      case 'DocumentNotFoundError':
+        handleNotFoundError(res, err);
+        break;
+      default:
+        handleDefaultError(err);
+    }
   }
 };
 
@@ -74,10 +110,22 @@ module.exports.updateAvatar = async (req, res) => {
         runValidators: true,
         upsert: false,
       }
-    ).orFail(() => createNotFoundError());
+    ).orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
 
     res.send(user);
   } catch (err) {
-    showErrorMessage(err, res);
+    switch (err.name) {
+      case 'ValidationError':
+        handleIncorrectDataError(res, USER_UPDATE_AVATAR_ERROR_TEXT);
+        break;
+      case 'CastError':
+        handleIncorrectDataError(res, INCORRECT_USER_ID_ERROR_TEXT);
+        break;
+      case 'DocumentNotFoundError':
+        handleNotFoundError(res, err);
+        break;
+      default:
+        handleDefaultError(err);
+    }
   }
 };

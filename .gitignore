@@ -16,4 +16,5 @@ node_modules
 
 # Other
 .prettierrc
-requests.http 
+requests.http
+.env

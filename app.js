@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 
 const process = require('process');
@@ -8,14 +6,18 @@ const mongoose = require('mongoose');
 
 const { routes } = require('./src/routes/index');
 
-const { logger, addTempUser } = require('./src/utils/utils');
-
-const { PORT } = process.env;
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(logger);
-app.use(addTempUser);
+// Add temp user
+app.use((req, res, next) => {
+  req.user = {
+    _id: '62e79cd855fd2d842b7eaf5c',
+  };
+
+  next();
+});
 
 app.use(routes);
 

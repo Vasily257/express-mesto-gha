@@ -16,8 +16,6 @@ const MISSING_CARD_ID_ERROR_TEXT = 'По указанному _id карточк
 
 const SERVER_ERROR_TEXT = 'Внутренняя ошибка сервера';
 
-const LOGGER_TEXT = 'Запрос залогирован!';
-
 module.exports = {
   CREATED_STATUS,
   BAD_REQUEST_STATUS,
@@ -33,6 +31,4 @@ module.exports = {
   INCORRECT_CARD_ID_ERROR_TEXT,
   MISSING_CARD_ID_ERROR_TEXT,
   SERVER_ERROR_TEXT,
-
-  LOGGER_TEXT,
 };

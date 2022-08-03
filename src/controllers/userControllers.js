@@ -19,9 +19,10 @@ const {
 module.exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({});
+
     res.send(users);
   } catch (err) {
-    handleDefaultError(err);
+    handleDefaultError(res);
   }
 };
 
@@ -41,7 +42,7 @@ module.exports.getUserById = async (req, res) => {
         handleNotFoundError(res, err);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };
@@ -58,7 +59,7 @@ module.exports.createUser = async (req, res) => {
         handleIncorrectDataError(res, USER_CREATION_ERROR_TEXT);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };
@@ -92,7 +93,7 @@ module.exports.updateProfile = async (req, res) => {
         handleNotFoundError(res, err);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };
@@ -125,7 +126,7 @@ module.exports.updateAvatar = async (req, res) => {
         handleNotFoundError(res, err);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };

@@ -14,7 +14,7 @@ const CARD_CREATION_ERROR_TEXT = 'Переданы некорректные да
 const INCORRECT_CARD_ID_ERROR_TEXT = 'Неправильно указан _id карточки.';
 const MISSING_CARD_ID_ERROR_TEXT = 'По указанному _id карточка не найдена.';
 
-const SERVER_ERROR_TEXT = 'Внутренняя ошибка сервера';
+const SERVER_ERROR_TEXT = 'Внутренняя ошибка сервера.';
 
 module.exports = {
   CREATED_STATUS,

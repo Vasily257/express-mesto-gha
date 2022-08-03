@@ -18,7 +18,7 @@ module.exports.getCards = async (req, res) => {
     const cards = await Card.find({});
     res.send(cards);
   } catch (err) {
-    handleDefaultError(err);
+    handleDefaultError(res);
   }
 };
 
@@ -35,7 +35,7 @@ module.exports.createCard = async (req, res) => {
         handleIncorrectDataError(res, CARD_CREATION_ERROR_TEXT);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };
@@ -56,7 +56,7 @@ module.exports.deleteCard = async (req, res) => {
         handleNotFoundError(res, err);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };
@@ -81,7 +81,7 @@ module.exports.likeCard = async (req, res) => {
         handleNotFoundError(res, err);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };
@@ -106,7 +106,7 @@ module.exports.dislikeCard = async (req, res) => {
         handleNotFoundError(res, err);
         break;
       default:
-        handleDefaultError(err);
+        handleDefaultError(res);
     }
   }
 };

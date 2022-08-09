@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const { User } = require('../models/userModels');
 
 const {
@@ -14,7 +16,6 @@ const {
   USER_CREATION_ERROR_TEXT,
   USER_UPDATE_PROFILE_ERROR_TEXT,
   USER_UPDATE_AVATAR_ERROR_TEXT,
-  USER_LOGIN_SUCCESS_TEXT,
   INCORRECT_USER_ID_ERROR_TEXT,
   MISSING_USER_ID_ERROR_TEXT,
 } = require('../utils/constants');
@@ -51,9 +52,7 @@ module.exports.getUserById = async (req, res) => {
 };
 
 module.exports.createUser = async (req, res) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
+  const { name, about, avatar, email, password } = req.body;
   try {
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -146,9 +145,13 @@ module.exports.updateAvatar = async (req, res) => {
 module.exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    User.findUserByCredentials(email, password);
-
-    res.send({ message: USER_LOGIN_SUCCESS_TEXT });
+    const user = User.findUserByCredentials(email, password);
+    const token = jwt.sign(
+      { _id: user._id },
+      '4e67f49b83ebfab9db204b2483575c67db0c4b5195baf6fc61c1d83a7f52898c',
+      { expiresIn: '7d' },
+    );
+    res.send({ token });
   } catch (err) {
     handleUnauthorizedError(res, err.message);
   }

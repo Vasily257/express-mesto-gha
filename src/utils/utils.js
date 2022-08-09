@@ -1,5 +1,6 @@
 const {
   CREATED_STATUS,
+  UNAUTHORIZED_STATUS,
   BAD_REQUEST_STATUS,
   NOT_FOUND_STATUS,
   INTERNAL_SERVER_ERROR_STATUS,
@@ -17,6 +18,11 @@ module.exports.createNotFoundError = (errorText) => {
   const err = new Error(errorText);
   err.name = 'DocumentNotFoundError';
   throw err;
+};
+
+module.exports.handleUnauthorizedError = (res, errorText) => {
+  res.status(UNAUTHORIZED_STATUS);
+  res.send({ message: errorText });
 };
 
 module.exports.handleIncorrectDataError = (res, errorText) => {

@@ -3,6 +3,7 @@ const { User } = require('../models/userModels');
 
 const {
   handlesuccessfulСreation,
+  handleUnauthorizedError,
   createNotFoundError,
   handleIncorrectDataError,
   handleNotFoundError,
@@ -13,6 +14,7 @@ const {
   USER_CREATION_ERROR_TEXT,
   USER_UPDATE_PROFILE_ERROR_TEXT,
   USER_UPDATE_AVATAR_ERROR_TEXT,
+  USER_LOGIN_SUCCESS_TEXT,
   INCORRECT_USER_ID_ERROR_TEXT,
   MISSING_USER_ID_ERROR_TEXT,
 } = require('../utils/constants');
@@ -138,5 +140,16 @@ module.exports.updateAvatar = async (req, res) => {
       default:
         handleDefaultError(res);
     }
+  }
+};
+
+module.exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    User.findUserByCredentials(email, password);
+
+    res.send({ message: USER_LOGIN_SUCCESS_TEXT });
+  } catch (err) {
+    handleUnauthorizedError(res, err.message);
   }
 };

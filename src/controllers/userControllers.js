@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const { User } = require('../models/userModels');
 
 const {
@@ -48,9 +49,18 @@ module.exports.getUserById = async (req, res) => {
 };
 
 module.exports.createUser = async (req, res) => {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   try {
-    const user = await User.create({ name, about, avatar });
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    });
 
     handlesuccessfulСreation(res, user);
   } catch (err) {

@@ -4,6 +4,7 @@ const process = require('process');
 
 const mongoose = require('mongoose');
 
+const { createUser, login } = require('./src/controllers/userControllers');
 const { routes } = require('./src/routes/index');
 
 const { PORT = 3000 } = process.env;
@@ -18,6 +19,9 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.post('/signin', login);
+app.post('/signup', express.json(), createUser);
 
 app.use(routes);
 

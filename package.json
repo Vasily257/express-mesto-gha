@@ -7,7 +7,8 @@
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
     "test": "echo && exit 1",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "lint-fix": "npx eslint . --fix"
   },
   "repository": {
     "type": "git",

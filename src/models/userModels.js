@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.static.findUserByCredentials = async function checkEmailAndPassWord(email, password) {
+userSchema.statics.findUserByCredentials = async function checkEmailAndPassWord(email, password) {
   const user = await this.findOne({ email }).orFail(() => {
     Promise.reject(new Error(USER_LOGIN_ERROR_TEXT));
   });
@@ -47,7 +47,7 @@ userSchema.static.findUserByCredentials = async function checkEmailAndPassWord(e
   const isPasswordValid = await bcrypt.compare(password, this.password);
 
   if (!isPasswordValid) {
-    Promise.reject(new Error(USER_LOGIN_ERROR_TEXT));
+    return Promise.reject(new Error(USER_LOGIN_ERROR_TEXT));
   }
 
   return user;

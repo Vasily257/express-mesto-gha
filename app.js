@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/signin', login);
+app.post('/signin', express.json(), login);
 app.post('/signup', express.json(), createUser);
 
 app.use(routes);

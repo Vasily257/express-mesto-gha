@@ -5,6 +5,8 @@ const process = require('process');
 const mongoose = require('mongoose');
 
 const { createUser, login } = require('./src/controllers/userControllers');
+
+const auth = require('./src/middlewares/auth');
 const { routes } = require('./src/routes/index');
 const { SERVER_ERROR_TEXT, INTERNAL_SERVER_ERROR_STATUS } = require('./src/utils/constants');
 
@@ -12,17 +14,10 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-// Add temp user
-app.use((req, res, next) => {
-  req.user = {
-    _id: '62e79cd855fd2d842b7eaf5c',
-  };
-
-  next();
-});
-
 app.post('/signin', express.json(), login);
 app.post('/signup', express.json(), createUser);
+
+app.use(auth);
 
 app.use(routes);
 

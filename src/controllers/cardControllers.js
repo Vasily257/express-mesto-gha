@@ -1,10 +1,15 @@
 const { Card } = require('../models/cardModels');
 
+const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
 
 const { handlesuccessfulСreation } = require('../utils/utils');
 
-const { MISSING_CARD_ID_ERROR_TEXT } = require('../utils/constants');
+const {
+  CARD_CREATION_ERROR_TEXT,
+  INCORRECT_CARD_ID_ERROR_TEXT,
+  MISSING_CARD_ID_ERROR_TEXT,
+} = require('../utils/constants');
 
 module.exports.getCards = async (req, res, next) => {
   try {
@@ -24,6 +29,10 @@ module.exports.createCard = async (req, res, next) => {
 
     handlesuccessfulСreation(res, card);
   } catch (err) {
+    if (err.name === 'ValidationError') {
+      next(new BadRequestError(CARD_CREATION_ERROR_TEXT));
+    }
+
     next(err);
   }
 };
@@ -36,6 +45,10 @@ module.exports.deleteCard = async (req, res, next) => {
 
     res.send(card);
   } catch (err) {
+    if (err.name === 'CastError') {
+      next(new BadRequestError(INCORRECT_CARD_ID_ERROR_TEXT));
+    }
+
     next(err);
   }
 };
@@ -54,6 +67,10 @@ module.exports.likeCard = async (req, res, next) => {
 
     res.send(card);
   } catch (err) {
+    if (err.name === 'CastError') {
+      next(new BadRequestError(INCORRECT_CARD_ID_ERROR_TEXT));
+    }
+
     next(err);
   }
 };
@@ -72,6 +89,10 @@ module.exports.dislikeCard = async (req, res, next) => {
 
     res.send(card);
   } catch (err) {
+    if (err.name === 'CastError') {
+      next(new BadRequestError(INCORRECT_CARD_ID_ERROR_TEXT));
+    }
+
     next(err);
   }
 };

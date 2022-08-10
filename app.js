@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const { createUser, login } = require('./src/controllers/userControllers');
 const { routes } = require('./src/routes/index');
-const SERVER_ERROR_TEXT = require('./src/utils/constants');
+const { SERVER_ERROR_TEXT, INTERNAL_SERVER_ERROR_STATUS } = require('./src/utils/constants');
 
 const { PORT = 3000 } = process.env;
 
@@ -29,10 +29,10 @@ app.use(routes);
 // Сentralized error handling
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = INTERNAL_SERVER_ERROR_STATUS, message } = err;
 
-  res.status(err.statusCode).send({
-    message: statusCode === 500 ? SERVER_ERROR_TEXT : message,
+  res.status(statusCode).send({
+    message: statusCode === INTERNAL_SERVER_ERROR_STATUS ? SERVER_ERROR_TEXT : message,
   });
 });
 

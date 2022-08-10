@@ -29,6 +29,8 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send({
     message: statusCode === INTERNAL_SERVER_ERROR_STATUS ? SERVER_ERROR_TEXT : message,
   });
+
+  next();
 });
 
 // Starting the app

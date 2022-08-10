@@ -8,15 +8,15 @@ const UnauthorizedError = require('../errors/unauthorized-error');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength: [2, 'минимальная длина имени — 2 символа'],
-    maxlength: [30, 'максимальная длина имени — 30 символов'],
+    minlength: [2, 'минимальная длина имени пользователя — 2 символа'],
+    maxlength: [30, 'максимальная длина имени пользователя — 30 символов'],
     default: 'Жак-Ив Кусто',
   },
   about: {
     type: String,
 
-    minlength: [2, 'минимальная длина имени — 2 символа'],
-    maxlength: [30, 'максимальная длина имени — 30 символов'],
+    minlength: [2, 'минимальная длина описания пользователя — 2 символа'],
+    maxlength: [30, 'максимальная длина описания пользователя — 30 символов'],
     default: 'Исследователь',
   },
   avatar: {

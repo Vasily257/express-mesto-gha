@@ -30,6 +30,20 @@ module.exports.getUserById = async (req, res, next) => {
   }
 };
 
+module.exports.getCurrentUser = async (req, res, next) => {
+  const { _id } = req.user;
+
+  try {
+    const user = await User.findById(_id).orFail(() => {
+      throw new NotFoundError(MISSING_USER_ID_ERROR_TEXT);
+    });
+
+    res.send(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.createUser = async (req, res, next) => {
   const {
     name, about, avatar, email, password,

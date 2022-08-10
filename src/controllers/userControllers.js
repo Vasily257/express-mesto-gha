@@ -9,6 +9,8 @@ const ConflictError = require('../errors/conflict-error');
 
 const { handlesuccessfulСreation } = require('../utils/utils');
 const {
+  DUPLICATE_RECORD_CODE,
+  SALT_ROUNDS,
   USER_CREATION_ERROR_TEXT,
   USER_UPDATE_PROFILE_ERROR_TEXT,
   USER_UPDATE_AVATAR_ERROR_TEXT,
@@ -62,7 +64,7 @@ module.exports.createUser = async (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
   try {
-    const hash = await bcrypt.hash(password, 10);
+    const hash = await bcrypt.hash(password, SALT_ROUNDS);
     const user = await User.create({
       name,
       about,
@@ -73,7 +75,7 @@ module.exports.createUser = async (req, res, next) => {
 
     handlesuccessfulСreation(res, user);
   } catch (err) {
-    if (err.code === 11000) {
+    if (err.code === DUPLICATE_RECORD_CODE) {
       next(new ConflictError(EXISTING_USER_ERROR));
     }
 

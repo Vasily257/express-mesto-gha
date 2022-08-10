@@ -5,6 +5,9 @@ const NOT_FOUND_STATUS = 404;
 const CONFLICT_STATUS = 409;
 const INTERNAL_SERVER_ERROR_STATUS = 500;
 
+const DUPLICATE_RECORD_CODE = 11000;
+const SALT_ROUNDS = 10;
+
 const USER_CREATION_ERROR_TEXT = 'Переданы некорректные данные при создании пользователя.';
 const USER_UPDATE_PROFILE_ERROR_TEXT = 'Переданы некорректные данные при обновлении профиля пользователя.';
 const USER_UPDATE_AVATAR_ERROR_TEXT = 'Переданы некорректные данные при обновлении аватара пользователя.';
@@ -30,6 +33,9 @@ module.exports = {
   NOT_FOUND_STATUS,
   CONFLICT_STATUS,
   INTERNAL_SERVER_ERROR_STATUS,
+
+  DUPLICATE_RECORD_CODE,
+  SALT_ROUNDS,
 
   AUTHORIZATION_WARNING_TEXT,
   AUTHORIZATION_FAILED_TEXT,

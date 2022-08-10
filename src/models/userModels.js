@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const { USER_LOGIN_ERROR_TEXT } = require('../utils/constants');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -41,13 +42,13 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findUserByCredentials = async function checkEmailAndPassWord(email, password) {
   const user = await this.findOne({ email }).orFail(() => {
-    Promise.reject(new Error(USER_LOGIN_ERROR_TEXT));
+    throw new UnauthorizedError(USER_LOGIN_ERROR_TEXT);
   });
 
-  const isPasswordValid = await bcrypt.compare(password, this.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    return Promise.reject(new Error(USER_LOGIN_ERROR_TEXT));
+    throw new UnauthorizedError(USER_LOGIN_ERROR_TEXT);
   }
 
   return user;

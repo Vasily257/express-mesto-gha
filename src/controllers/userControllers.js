@@ -3,56 +3,37 @@ const jwt = require('jsonwebtoken');
 
 const { User } = require('../models/userModels');
 
-const {
-  handlesuccessfulСreation,
-  handleUnauthorizedError,
-  createNotFoundError,
-  handleIncorrectDataError,
-  handleNotFoundError,
-  handleDefaultError,
-} = require('../utils/utils');
+const NotFoundError = require('../errors/not-found-error');
 
-const {
-  USER_CREATION_ERROR_TEXT,
-  USER_UPDATE_PROFILE_ERROR_TEXT,
-  USER_UPDATE_AVATAR_ERROR_TEXT,
-  INCORRECT_USER_ID_ERROR_TEXT,
-  MISSING_USER_ID_ERROR_TEXT,
-} = require('../utils/constants');
+const { handlesuccessfulСreation } = require('../utils/utils');
+const { MISSING_USER_ID_ERROR_TEXT } = require('../utils/constants');
 
-module.exports.getUsers = async (req, res) => {
+module.exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
 
     res.send(users);
   } catch (err) {
-    handleDefaultError(res);
+    next(err);
   }
 };
 
-module.exports.getUserById = async (req, res) => {
+module.exports.getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).orFail(() => {
-      createNotFoundError(MISSING_USER_ID_ERROR_TEXT);
+      throw new NotFoundError(MISSING_USER_ID_ERROR_TEXT);
     });
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'CastError':
-        handleIncorrectDataError(res, INCORRECT_USER_ID_ERROR_TEXT);
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(res);
-    }
+    next(err);
   }
 };
 
-module.exports.createUser = async (req, res) => {
-  const { name, about, avatar, email, password } = req.body;
+module.exports.createUser = async (req, res, next) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   try {
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -65,17 +46,11 @@ module.exports.createUser = async (req, res) => {
 
     handlesuccessfulСreation(res, user);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, USER_CREATION_ERROR_TEXT);
-        break;
-      default:
-        handleDefaultError(res);
-    }
+    next(err);
   }
 };
 
-module.exports.updateProfile = async (req, res) => {
+module.exports.updateProfile = async (req, res, next) => {
   const { name, about } = req.body;
   try {
     const user = await User.findByIdAndUpdate(
@@ -89,27 +64,17 @@ module.exports.updateProfile = async (req, res) => {
         runValidators: true,
         upsert: false,
       },
-    ).orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
+    ).orFail(() => {
+      throw new NotFoundError(MISSING_USER_ID_ERROR_TEXT);
+    });
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, USER_UPDATE_PROFILE_ERROR_TEXT);
-        break;
-      case 'CastError':
-        handleIncorrectDataError(res, INCORRECT_USER_ID_ERROR_TEXT);
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(res);
-    }
+    next(err);
   }
 };
 
-module.exports.updateAvatar = async (req, res) => {
+module.exports.updateAvatar = async (req, res, next) => {
   const { avatar } = req.body;
   try {
     const user = await User.findByIdAndUpdate(
@@ -122,37 +87,25 @@ module.exports.updateAvatar = async (req, res) => {
         runValidators: true,
         upsert: false,
       },
-    ).orFail(() => createNotFoundError(MISSING_USER_ID_ERROR_TEXT));
+    ).orFail(() => {
+      throw new NotFoundError(MISSING_USER_ID_ERROR_TEXT);
+    });
 
     res.send(user);
   } catch (err) {
-    switch (err.name) {
-      case 'ValidationError':
-        handleIncorrectDataError(res, USER_UPDATE_AVATAR_ERROR_TEXT);
-        break;
-      case 'CastError':
-        handleIncorrectDataError(res, INCORRECT_USER_ID_ERROR_TEXT);
-        break;
-      case 'DocumentNotFoundError':
-        handleNotFoundError(res, err);
-        break;
-      default:
-        handleDefaultError(res);
-    }
+    next(err);
   }
 };
 
-module.exports.login = async (req, res) => {
+module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = User.findUserByCredentials(email, password);
-    const token = jwt.sign(
-      { _id: user._id },
-      '4e67f49b83ebfab9db204b2483575c67db0c4b5195baf6fc61c1d83a7f52898c',
-      { expiresIn: '7d' },
-    );
+    const user = await User.findUserByCredentials(email, password);
+
+    const token = jwt.sign({ _id: user._id }, 'super-secret-password', { expiresIn: '7d' });
+
     res.send({ token });
   } catch (err) {
-    handleUnauthorizedError(res, err.message);
+    next(err);
   }
 };

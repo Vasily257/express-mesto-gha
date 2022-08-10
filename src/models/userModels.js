@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-
     minlength: [2, 'минимальная длина описания пользователя — 2 символа'],
     maxlength: [30, 'максимальная длина описания пользователя — 30 символов'],
     default: 'Исследователь',

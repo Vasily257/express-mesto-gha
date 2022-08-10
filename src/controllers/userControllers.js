@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models/userModels');
 
 const NotFoundError = require('../errors/not-found-error');
+const ConflictError = require('../errors/conflict-error');
 
 const { handlesuccessfulСreation } = require('../utils/utils');
-const { MISSING_USER_ID_ERROR_TEXT } = require('../utils/constants');
+const { MISSING_USER_ID_ERROR_TEXT, EXISTING_USER_ERROR } = require('../utils/constants');
 
 module.exports.getUsers = async (req, res, next) => {
   try {
@@ -49,6 +50,11 @@ module.exports.createUser = async (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
   try {
+    const existingUser = User.find({ email });
+    if (existingUser) {
+      throw new ConflictError(EXISTING_USER_ERROR);
+    }
+
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({
       name,

@@ -17,6 +17,8 @@ const CARD_CREATION_ERROR_TEXT = 'Переданы некорректные да
 const INCORRECT_CARD_ID_ERROR_TEXT = 'Неправильно указан _id карточки.';
 const MISSING_CARD_ID_ERROR_TEXT = 'По указанному _id карточка не найдена.';
 
+const EXISTING_USER_ERROR = 'Такой пользователь уже существует.';
+
 const SERVER_ERROR_TEXT = 'Внутренняя ошибка сервера.';
 
 module.exports = {
@@ -31,10 +33,13 @@ module.exports = {
   USER_UPDATE_AVATAR_ERROR_TEXT,
   USER_LOGIN_ERROR_TEXT,
   USER_LOGIN_SUCCESS_TEXT,
+  EXISTING_USER_ERROR,
+
   INCORRECT_USER_ID_ERROR_TEXT,
   MISSING_USER_ID_ERROR_TEXT,
   CARD_CREATION_ERROR_TEXT,
   INCORRECT_CARD_ID_ERROR_TEXT,
   MISSING_CARD_ID_ERROR_TEXT,
+
   SERVER_ERROR_TEXT,
 };

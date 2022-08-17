@@ -10,8 +10,8 @@ const {
 const userRoutes = express.Router();
 
 userRoutes.get('/', getUsers);
-userRoutes.get('/:id', getUserById);
 userRoutes.get('/me', getCurrentUser);
+userRoutes.get('/:id', getUserById);
 userRoutes.patch('/me', express.json(), updateProfile);
 userRoutes.patch('/me/avatar', express.json(), updateAvatar);
 

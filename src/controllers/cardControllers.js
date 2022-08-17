@@ -1,12 +1,14 @@
 const { Card } = require('../models/cardModels');
 
 const BadRequestError = require('../errors/bad-request-error');
+const ForbiddenError = require('../errors/forbidden-error');
 const NotFoundError = require('../errors/not-found-error');
 
 const { handlesuccessfulСreation } = require('../utils/utils');
 
 const {
   CARD_CREATION_ERROR_TEXT,
+  CARD_DELETION_ERROR_TEXT,
   INCORRECT_CARD_ID_ERROR_TEXT,
   MISSING_CARD_ID_ERROR_TEXT,
 } = require('../utils/constants');
@@ -39,9 +41,15 @@ module.exports.createCard = async (req, res, next) => {
 
 module.exports.deleteCard = async (req, res, next) => {
   try {
-    const card = await Card.findByIdAndDelete(req.params.id).orFail(() => {
+    const card = await Card.findById(req.params.id).orFail(() => {
       throw new NotFoundError(MISSING_CARD_ID_ERROR_TEXT);
     });
+
+    if (card.owner.toString() !== req.user._id) {
+      throw new ForbiddenError(CARD_DELETION_ERROR_TEXT);
+    } else {
+      card.delete();
+    }
 
     res.send(card);
   } catch (err) {

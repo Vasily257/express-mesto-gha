@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 const { User } = require('../models/userModels');
 
@@ -7,11 +6,10 @@ const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
 const ConflictError = require('../errors/conflict-error');
 
-const { handlesuccessfulСreation } = require('../utils/utils');
+const { handlesuccessfulСreation, jwtSign } = require('../utils/utils');
 const {
   DUPLICATE_RECORD_CODE,
   SALT_ROUNDS,
-  JWT_SECRET,
   USER_CREATION_ERROR_TEXT,
   USER_UPDATE_PROFILE_ERROR_TEXT,
   USER_UPDATE_AVATAR_ERROR_TEXT,
@@ -155,7 +153,7 @@ module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.findUserByCredentials(email, password);
-    const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwtSign(user);
 
     res.send({ token });
   } catch (err) {

@@ -1,41 +1,6 @@
-const {
-  CREATED_STATUS,
-  UNAUTHORIZED_STATUS,
-  BAD_REQUEST_STATUS,
-  NOT_FOUND_STATUS,
-  INTERNAL_SERVER_ERROR_STATUS,
-  SERVER_ERROR_TEXT,
-} = require('./constants');
-
-// Requests handlers
+const { CREATED_STATUS } = require('./constants');
 
 module.exports.handlesuccessfulСreation = (res, createdObject) => {
   res.status(CREATED_STATUS);
   res.send(createdObject);
-};
-
-module.exports.createNotFoundError = (errorText) => {
-  const err = new Error(errorText);
-  err.name = 'DocumentNotFoundError';
-  throw err;
-};
-
-module.exports.handleUnauthorizedError = (res, errorText) => {
-  res.status(UNAUTHORIZED_STATUS);
-  res.send({ message: errorText });
-};
-
-module.exports.handleIncorrectDataError = (res, errorText) => {
-  res.status(BAD_REQUEST_STATUS);
-  res.send({ message: errorText });
-};
-
-module.exports.handleNotFoundError = (res, err) => {
-  res.status(NOT_FOUND_STATUS);
-  res.send({ message: err.message });
-};
-
-module.exports.handleDefaultError = (res) => {
-  res.status(INTERNAL_SERVER_ERROR_STATUS);
-  res.send({ message: SERVER_ERROR_TEXT });
 };

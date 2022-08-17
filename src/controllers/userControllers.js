@@ -11,6 +11,7 @@ const { handlesuccessfulСreation } = require('../utils/utils');
 const {
   DUPLICATE_RECORD_CODE,
   SALT_ROUNDS,
+  JWT_SECRET,
   USER_CREATION_ERROR_TEXT,
   USER_UPDATE_PROFILE_ERROR_TEXT,
   USER_UPDATE_AVATAR_ERROR_TEXT,
@@ -154,7 +155,7 @@ module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.findUserByCredentials(email, password);
-    const token = jwt.sign({ _id: user._id }, 'super-secret-password', { expiresIn: '7d' });
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
     res.send({ token });
   } catch (err) {

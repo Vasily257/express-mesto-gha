@@ -36,13 +36,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    select: false,
   },
 });
 
 userSchema.statics.findUserByCredentials = async function checkEmailAndPassWord(email, password) {
   const user = await this.findOne({ email }).orFail(() => {
     throw new UnauthorizedError(AUTHORIZATION_FAILED_TEXT);
-  });
+  }).select('+password');
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
 

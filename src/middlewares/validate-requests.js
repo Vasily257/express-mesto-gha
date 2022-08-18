@@ -13,7 +13,6 @@ const cardNameRules = Joi.string().required().min(2).max(30);
 const linkRules = Joi.string().required().regex(linkRegex);
 
 const idRules = Joi.string().alphanum().length(24);
-const authorizationRules = Joi.string().required().regex(/Bearer \w+/);
 
 // User data validation
 
@@ -32,18 +31,12 @@ module.exports.validateUserInfo = celebrate({
     name: userNameRules,
     about: aboutRules,
   }),
-  headers: Joi.object().keys({
-    authorization: authorizationRules,
-  }).unknown(true),
 });
 
 module.exports.validateUserAvatar = celebrate({
   body: Joi.object().keys({
     avatar: avatarRules,
   }),
-  headers: Joi.object().keys({
-    authorization: authorizationRules,
-  }).unknown(true),
 });
 
 // Cards data validation
@@ -61,7 +54,4 @@ module.exports.validateId = celebrate({
   params: Joi.object().keys({
     id: idRules,
   }),
-  headers: Joi.object().keys({
-    authorization: authorizationRules,
-  }).unknown(true),
 });

@@ -4,6 +4,10 @@ const process = require('process');
 
 const mongoose = require('mongoose');
 
+const helmet = require('helmet');
+
+const rateLimit = require('express-rate-limit');
+
 const { errors } = require('celebrate');
 
 const { routes } = require('./src/routes/index');
@@ -12,6 +16,15 @@ const { SERVER_ERROR_TEXT, INTERNAL_SERVER_ERROR_STATUS } = require('./src/utils
 const { PORT = 3000 } = process.env;
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(limiter);
+
+app.use(helmet.hidePoweredBy());
 
 app.use(express.json());
 

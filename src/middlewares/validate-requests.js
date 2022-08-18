@@ -11,9 +11,6 @@ const passwordRules = Joi.string().required();
 
 const cardNameRules = Joi.string().min(2).max(30);
 const linkRules = Joi.string().regex(linkRegex);
-const cardOwnerRules = Joi.string().alphanum().length(24);
-const likesRules = Joi.array();
-const createdDateRules = Joi.date();
 
 const idRules = Joi.string().alphanum().length(24);
 const authorizationRules = Joi.string().required().regex(/Bearer \w+/);
@@ -55,9 +52,6 @@ module.exports.validateCardData = celebrate({
   body: Joi.object().keys({
     name: cardNameRules,
     link: linkRules,
-    owner: cardOwnerRules,
-    likes: likesRules,
-    createdAt: createdDateRules,
   }),
   headers: Joi.object().keys({
     authorization: authorizationRules,

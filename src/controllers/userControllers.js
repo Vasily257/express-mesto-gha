@@ -38,6 +38,7 @@ module.exports.getUserById = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError(INCORRECT_USER_ID_ERROR_TEXT));
+      return;
     }
 
     next(err);
@@ -79,10 +80,12 @@ module.exports.createUser = async (req, res, next) => {
   } catch (err) {
     if (err.code === DUPLICATE_RECORD_CODE) {
       next(new ConflictError(EXISTING_USER_ERROR));
+      return;
     }
 
     if (err.name === 'ValidationError') {
       next(new BadRequestError(USER_CREATION_ERROR_TEXT));
+      return;
     }
 
     next(err);
@@ -111,10 +114,12 @@ module.exports.updateProfile = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError(USER_UPDATE_PROFILE_ERROR_TEXT));
+      return;
     }
 
     if (err.name === 'CastError') {
       next(new BadRequestError(INCORRECT_USER_ID_ERROR_TEXT));
+      return;
     }
 
     next(err);
@@ -142,10 +147,12 @@ module.exports.updateAvatar = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError(USER_UPDATE_AVATAR_ERROR_TEXT));
+      return;
     }
 
     if (err.name === 'CastError') {
       next(new BadRequestError(INCORRECT_USER_ID_ERROR_TEXT));
+      return;
     }
 
     next(err);

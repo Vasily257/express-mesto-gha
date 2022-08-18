@@ -33,6 +33,7 @@ module.exports.createCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequestError(CARD_CREATION_ERROR_TEXT));
+      return;
     }
 
     next(err);
@@ -48,13 +49,14 @@ module.exports.deleteCard = async (req, res, next) => {
     if (card.owner.toString() !== req.user._id) {
       throw new ForbiddenError(CARD_DELETION_ERROR_TEXT);
     } else {
-      card.delete();
+      await card.delete();
     }
 
     res.send(card);
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError(INCORRECT_CARD_ID_ERROR_TEXT));
+      return;
     }
 
     next(err);
@@ -77,6 +79,7 @@ module.exports.likeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError(INCORRECT_CARD_ID_ERROR_TEXT));
+      return;
     }
 
     next(err);
@@ -99,6 +102,7 @@ module.exports.dislikeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequestError(INCORRECT_CARD_ID_ERROR_TEXT));
+      return;
     }
 
     next(err);

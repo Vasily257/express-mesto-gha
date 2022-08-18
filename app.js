@@ -1,21 +1,17 @@
 const express = require('express');
-
 const process = require('process');
-
 const mongoose = require('mongoose');
-
 const helmet = require('helmet');
-
 const rateLimit = require('express-rate-limit');
-
 const { errors } = require('celebrate');
-
 const { routes } = require('./src/routes/index');
-const { SERVER_ERROR_TEXT, INTERNAL_SERVER_ERROR_STATUS } = require('./src/utils/constants');
+const centralizedErrorHandling = require('./src/middlewares/centralized-error-handling');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
+
+// Server protection
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -23,28 +19,17 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
 app.use(helmet.hidePoweredBy());
 
-app.use(express.json());
+// Route handlers
 
+app.use(express.json());
 app.use(routes);
 
 // Error validation
 
 app.use(errors());
-
-// Сentralized error handling
-
-app.use((err, req, res, next) => {
-  const { statusCode = INTERNAL_SERVER_ERROR_STATUS, message } = err;
-
-  res.status(statusCode).send({
-    message: statusCode === INTERNAL_SERVER_ERROR_STATUS ? SERVER_ERROR_TEXT : message,
-  });
-
-  next();
-});
+app.use(centralizedErrorHandling);
 
 // Starting the app
 

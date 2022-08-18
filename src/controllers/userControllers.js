@@ -64,13 +64,16 @@ module.exports.createUser = async (req, res, next) => {
   } = req.body;
   try {
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
-    const user = await User.create({
+    let user = await User.create({
       name,
       about,
       avatar,
       email,
       password: hash,
     });
+
+    user = user.toObject();
+    delete user.password;
 
     handlesuccessfulСreation(res, user);
   } catch (err) {

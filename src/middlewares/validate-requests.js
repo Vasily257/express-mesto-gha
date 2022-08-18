@@ -5,15 +5,16 @@ const linkRegex = /https?:\/\/(www\.)?([a-z0-9\-\.])+(\.\w*)([\w\-\._~:\/\?#\[\]
 
 const userNameRules = Joi.string().min(2).max(30);
 const aboutRules = Joi.string().min(2).max(30);
+const avatarRules = Joi.string().regex(linkRegex);
 const emailRules = Joi.string().required().email();
 const passwordRules = Joi.string().required();
 
 const cardNameRules = Joi.string().min(2).max(30);
+const linkRules = Joi.string().regex(linkRegex);
 const cardOwnerRules = Joi.string().alphanum().length(24);
 const likesRules = Joi.array();
 const createdDateRules = Joi.date();
 
-const linkRules = Joi.string().regex(linkRegex);
 const idRules = Joi.string().alphanum().length(24);
 const authorizationRules = Joi.string().required().regex(/Bearer \w+/);
 
@@ -41,7 +42,7 @@ module.exports.validateUserInfo = celebrate({
 
 module.exports.validateUserAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: linkRules,
+    avatar: avatarRules,
   }),
   headers: Joi.object().keys({
     authorization: authorizationRules,

@@ -4,9 +4,9 @@ const { getNothing } = require('../controllers/notFoundControllers');
 const notFoundRoutes = express.Router();
 
 notFoundRoutes.get('/', getNothing);
-notFoundRoutes.post('/', express.json(), getNothing);
-notFoundRoutes.put('/', express.json(), getNothing);
-notFoundRoutes.patch('/', express.json(), getNothing);
+notFoundRoutes.post('/', getNothing);
+notFoundRoutes.put('/', getNothing);
+notFoundRoutes.patch('/', getNothing);
 notFoundRoutes.delete('/', getNothing);
 
 module.exports = {

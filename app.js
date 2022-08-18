@@ -6,11 +6,6 @@ const mongoose = require('mongoose');
 
 const { errors } = require('celebrate');
 
-const { createUser, login } = require('./src/controllers/userControllers');
-
-const auth = require('./src/middlewares/auth');
-const { validateUserData } = require('./src/middlewares/validate-requests');
-
 const { routes } = require('./src/routes/index');
 const { SERVER_ERROR_TEXT, INTERNAL_SERVER_ERROR_STATUS } = require('./src/utils/constants');
 
@@ -18,10 +13,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.post('/signin', [express.json(), validateUserData], login);
-app.post('/signup', [express.json(), validateUserData], createUser);
-
-app.use(auth);
+app.use(express.json());
 
 app.use(routes);
 

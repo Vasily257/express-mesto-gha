@@ -15,7 +15,7 @@ const userRoutes = express.Router();
 userRoutes.get('/', getUsers);
 userRoutes.get('/me', getCurrentUser);
 userRoutes.get('/:id', validateId, getUserById);
-userRoutes.patch('/me', [express.json(), validateUserInfo], updateProfile);
-userRoutes.patch('/me/avatar', [express.json(), validateUserAvatar], updateAvatar);
+userRoutes.patch('/me', validateUserInfo, updateProfile);
+userRoutes.patch('/me/avatar', validateUserAvatar, updateAvatar);
 
 module.exports = { userRoutes };

@@ -13,7 +13,7 @@ const { validateId, validateCardData } = require('../middlewares/validate-reques
 const cardRoutes = express.Router();
 
 cardRoutes.get('/', getCards);
-cardRoutes.post('/', [express.json(), validateCardData], createCard);
+cardRoutes.post('/', validateCardData, createCard);
 cardRoutes.delete('/:id', validateId, deleteCard);
 cardRoutes.put('/:id/likes', validateId, likeCard);
 cardRoutes.delete('/:id/likes', validateId, dislikeCard);

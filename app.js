@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 
 const process = require('process');
@@ -14,7 +16,7 @@ const { validateUserData } = require('./src/middlewares/validate-requests');
 const { routes } = require('./src/routes/index');
 const { SERVER_ERROR_TEXT, INTERNAL_SERVER_ERROR_STATUS } = require('./src/utils/constants');
 
-const { PORT = 3000 } = process.env;
+const { PORT } = process.env;
 
 const app = express();
 

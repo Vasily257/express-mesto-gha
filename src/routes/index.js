@@ -8,7 +8,7 @@ const auth = require('../middlewares/auth');
 const { userRoutes } = require('./userRoutes');
 const { cardRoutes } = require('./cardRoutes');
 
-const { notFoundRoutes } = require('./notFoundRoutes');
+const NotFoundError = require('../errors/not-found-error');
 
 const routes = express.Router();
 
@@ -19,6 +19,8 @@ routes.use(auth);
 
 routes.use('/users', userRoutes);
 routes.use('/cards', cardRoutes);
-routes.use('/*', notFoundRoutes);
+routes.use((req, res, next) => {
+  next(new NotFoundError('Запрашиваемая страница не найдена.'));
+});
 
 module.exports = { routes };

@@ -9,8 +9,8 @@ const avatarRules = Joi.string().regex(linkRegex);
 const emailRules = Joi.string().required().email();
 const passwordRules = Joi.string().required();
 
-const cardNameRules = Joi.string().required().min(2).max(30);
-const linkRules = Joi.string().required().regex(linkRegex);
+const cardNameRules = Joi.string().min(2).max(30);
+const linkRules = Joi.string().regex(linkRegex);
 
 const idRules = Joi.string().alphanum().length(24);
 const authorizationRules = Joi.string().required().regex(/Bearer \w+/);

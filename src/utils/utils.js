@@ -1,10 +1,6 @@
-const process = require('process');
-
 const jwt = require('jsonwebtoken');
 
-const { CREATED_STATUS } = require('./constants');
-
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, CREATED_STATUS } = require('./constants');
 
 module.exports.handlesuccessfulСreation = (res, createdObject) => {
   res.status(CREATED_STATUS);

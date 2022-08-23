@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { routes } = require('./src/routes/index');
+const { requestLogger, errorLogger } = require('./src/middlewares/logger');
 const centralizedErrorHandling = require('./src/middlewares/centralized-error-handling');
 
 const { PORT = 3000 } = process.env;
@@ -20,6 +21,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(helmet.hidePoweredBy());
+app.use(requestLogger);
 
 // Route handlers
 
@@ -28,6 +30,7 @@ app.use(routes);
 
 // Error validation
 
+app.use(errorLogger);
 app.use(errors());
 app.use(centralizedErrorHandling);
 

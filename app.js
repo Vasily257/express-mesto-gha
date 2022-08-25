@@ -1,12 +1,14 @@
 const express = require('express');
 const process = require('process');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { routes } = require('./src/routes/index');
 const { requestLogger, errorLogger } = require('./src/middlewares/logger');
 const centralizedErrorHandling = require('./src/middlewares/centralized-error-handling');
+const { limiterOptions, corsOptions } = require('./src/utils/constants');
 
 const { PORT = 3000 } = process.env;
 
@@ -14,11 +16,9 @@ const app = express();
 
 // Server protection
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
+const limiter = rateLimit(limiterOptions);
 
+app.use(cors(corsOptions));
 app.use(limiter);
 app.use(helmet.hidePoweredBy());
 app.use(requestLogger);

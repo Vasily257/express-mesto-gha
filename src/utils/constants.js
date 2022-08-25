@@ -30,6 +30,18 @@ const EXISTING_USER_ERROR = 'Такой пользователь уже суще
 
 const SERVER_ERROR_TEXT = 'Внутренняя ошибка сервера.';
 
+const limiterOptions = {
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+};
+
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
 module.exports = {
   CREATED_STATUS,
   UNAUTHORIZED_STATUS,
@@ -60,4 +72,7 @@ module.exports = {
   MISSING_CARD_ID_ERROR_TEXT,
 
   SERVER_ERROR_TEXT,
+
+  limiterOptions,
+  corsOptions,
 };
